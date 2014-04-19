@@ -31,8 +31,7 @@ Type literals
 | type       	| example		       		 	 |
 | ------------- |--------------------------------|
 | string      	| ""             				 |
-| int     		| 1 							 |
-| float      	| 1.0           				 |
+| number     	| 1 							 |
 | function      | [] ->           				 |
 
 Builtin functions
