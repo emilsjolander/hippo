@@ -1,6 +1,6 @@
 Lanuage specification for hippo-lang
 ====================================
-Hippo is a cool new functional language with type inferense
+Hippo is a toy project i'm working on.
 
 Keywords
 --------
