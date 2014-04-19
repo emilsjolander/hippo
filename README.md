@@ -4,45 +4,54 @@ Hippo is a cool new functional language with type inferense
 
 Keywords
 --------
-def		bind a type instance to a name
-match	define a match block
-->		equivalence
-_		empty matcher
-import	import a directory
+| keyword       | description		       		 |
+| ------------- |--------------------------------|
+| import      	| import a directory             |
+| def     		| bind a type instance to a name |
+| match      	| define a match block           |
 
 Operators
 ---------
-+		add two numbers
--		subtract two numbers
-*		multiply two numbers	
-/		divide two numbers
-^		raise a number to the power of the other number	
-(		opening parentheses
-)		closing parentheses
-//		single line comment
-/*		multi line comment start
-*/		multi line comment end
+| operator      | description		       		 |
+| ------------- |--------------------------------|
+| +          	| add two numbers             	 |
+| -          	| subtract two numbers           |
+| *          	| multiply two numbers           |
+| /          	| divide two numbers             |
+| ^          	| raise a number to another      |
+| (          	| opening parentheses            |
+| )          	| closing parentheses            |
+| //          	| single line comment            |
+| /*         	| multi line comment start       |
+| */         	| multi line comment end         |
+| _          	| empty matcher             	 |
 
 Type literals
 -------------
-string 		""
-int			1
-float		1.0
-function 	[] ->
+| type       	| example		       		 	 |
+| ------------- |--------------------------------|
+| string      	| ""             				 |
+| int     		| 1 							 |
+| float      	| 1.0           				 |
+| function      | [] ->           				 |
 
 Builtin functions
 -----------------
-push
-join
-pop
-head
-tail
-len
-print
+| function      | description		       		 |
+| ------------- |--------------------------------|
+| push      	| push an element onto a list    |
+| join     		| join two lists 				 |
+| pop      		| pop an element from a list     |
+| head      	| get the head of a list         |
+| tail      	| get the tail of a list         |
+| len      		| get the length of a list       |
+| print      	| print a value				     |
+
 
 Code sample
 -----------
-import github.com/emilsjolander/stdlib
+```
+import github.com/emilsjolander/hippo/stdlib
 import helpers
 
 def pi 3.14159
@@ -58,3 +67,4 @@ def map [l, f] ->
 		0 	-> []
 		1 	-> [f(head(l))]
 		_ 	-> push (f(head(l)), map(tail(l), f))
+```
