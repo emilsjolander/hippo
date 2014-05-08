@@ -1,83 +1,83 @@
 package lex
 
 import (
-	"fmt"
 	"strings"
 	"unicode/utf8"
 )
 
-type TokenType int
-
-const (
-	TokenError TokenType = iota
-	TokenOpenParen
-	TokenCloseParen
-	TokenOperator
-	TokenNumber
-	TokenEOF
-)
-
-type Token struct {
-	Typ TokenType
-	Val string
-}
-
-func (t Token) String() string {
-	switch t.Typ {
-	case TokenEOF:
-		return "EOF"
-	case TokenError:
-		return t.Val
-	}
-	if len(t.Val) > 10 {
-		return fmt.Sprintf("%.10q...", t.Val)
-	}
-	return t.Val
-}
-
 type lexer struct {
-	input  string
-	start  int
-	pos    int
-	width  int
-	tokens chan Token
+	input string
+
+	start int
+	pos   int
+	width int
+
+	startPos Pos
+
+	lexemes chan Lexeme
 }
 
 const eof = rune(-1)
 
 type lexFunc func(*lexer) lexFunc
 
-func Lex(input string) chan Token {
+func Lex(input string) chan Lexeme {
 	l := &lexer{
-		input:  input,
-		tokens: make(chan Token),
+		input:    input,
+		lexemes:  make(chan Lexeme),
+		startPos: Pos{1, 1},
 	}
 	go func() {
-		for state := expression; state != nil; {
-			// skip white space
-			l.acceptMany(" ")
-			l.ignore()
-
+		for state := root; state != nil; {
 			if l.peak() == eof {
-				l.emit(TokenEOF)
+				l.emit(EOF)
 				break
 			}
-
 			state = state(l)
 		}
-		close(l.tokens)
+		close(l.lexemes)
 	}()
-	return l.tokens
+	return l.lexemes
 }
 
-func (l *lexer) emit(typ TokenType) {
-	l.tokens <- Token{typ, l.input[l.start:l.pos]}
+func (l *lexer) updateStartPos() {
+	val := l.input[l.start:l.pos]
+
+	if newLineCount := strings.Count(val, "\n"); newLineCount > 0 {
+		l.startPos.Row += strings.Count(val, "\n")
+		l.startPos.Col = len(val) - strings.LastIndex(val, "\n")
+	} else {
+		l.startPos.Col += len(val)
+	}
+
 	l.start = l.pos
 }
 
+func (l *lexer) match() string {
+	return l.input[l.start:l.pos]
+}
+
+func (l *lexer) emit(tok Token) {
+	l.lexemes <- Lexeme{
+		Tok:   tok,
+		Val:   l.match(),
+		Start: l.startPos,
+	}
+	l.updateStartPos()
+}
+
 func (l *lexer) emitError(err error) {
+	l.lexemes <- Lexeme{
+		Tok:   Error,
+		Val:   err.Error(),
+		Start: l.startPos,
+	}
 	l.ignore()
-	l.tokens <- Token{TokenError, err.Error()}
+}
+
+func (l *lexer) ignoreSpace() {
+	l.acceptMany(" \n\r\t")
+	l.ignore()
 }
 
 func (l *lexer) next() rune {
@@ -90,12 +90,13 @@ func (l *lexer) next() rune {
 	return eof
 }
 
-func (l *lexer) ignore() {
-	l.start = l.pos
-}
-
 func (l *lexer) backup() {
 	l.pos -= l.width
+	l.width = 0
+}
+
+func (l *lexer) ignore() {
+	l.updateStartPos()
 }
 
 func (l *lexer) peak() rune {
@@ -114,8 +115,11 @@ func (l *lexer) acceptOne(valid string) bool {
 
 func (l *lexer) acceptMany(valid string) int {
 	n := 0
+	totalWidth := 0
 	for l.acceptOne(valid) {
+		totalWidth += l.width
 		n++
 	}
+	l.width = totalWidth
 	return n
 }

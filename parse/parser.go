@@ -1,65 +1,68 @@
 package parse
 
 import (
-	"strconv"
-
+	"fmt"
 	"github.com/emilsjolander/hippo/lex"
 )
 
-func Parse(input chan lex.Token) Node {
-	nodes := rootNodes(input)
-	return treeFromNodes(nodes)
+type parser struct {
+	lexemes   chan lex.Lexeme
+	current   lex.Lexeme
+	errors    []Error
+	eof       bool
+	hasPeaked bool
+	peaked    lex.Lexeme
 }
 
-func rootNodes(input chan lex.Token) []Node {
-	nodes := make([]Node, 0)
-	for t := range input {
-		switch t.Typ {
-		case lex.TokenNumber:
-			f, _ := strconv.ParseFloat(t.Val, 64)
-			n := &number{f}
-			nodes = append(nodes, n)
-		case lex.TokenOperator:
-			n := &operator{sign: t.Val}
-			nodes = append(nodes, n)
-		case lex.TokenOpenParen:
-			n := &number{Parse(input).Value()}
-			nodes = append(nodes, n)
-		case lex.TokenCloseParen, lex.TokenEOF:
-			return nodes
-		case lex.TokenError:
-			panic(t.Val)
+func (p *parser) next() lex.Lexeme {
+	if p.hasPeaked {
+		p.hasPeaked = false
+		return p.peaked
+	}
+	if !p.eof {
+		p.current = <-p.lexemes
+		if p.current.Tok == lex.EOF {
+			p.eof = true
 		}
 	}
-	return nodes
+	return p.current
 }
 
-func treeFromNodes(nodes []Node) Node {
-	if len(nodes) == 1 {
-		return nodes[0]
-	}
-	if len(nodes)%2 == 0 {
-		panic("error: number of nodes must be odd")
-	}
-
-	i := indexOfRootOperator(nodes)
-	op := nodes[i].(*operator)
-	op.left = treeFromNodes(nodes[:i])
-	op.right = treeFromNodes(nodes[i+1:])
-	return op
+func (p *parser) peak() lex.Lexeme {
+	l := p.next()
+	p.hasPeaked = true
+	p.peaked = l
+	return l
 }
 
-func indexOfRootOperator(nodes []Node) int {
-	var index int
-	precedence := 999
-	for i, n := range nodes {
-		switch t := n.(type) {
-		case *operator:
-			if t.precedence() <= precedence {
-				precedence = t.precedence()
-				index = i
-			}
+func (p *parser) errorf(cause string, args ...interface{}) errorNode {
+	err := Error{
+		Cause: fmt.Sprintf(cause, args...),
+		Start: p.current.Start,
+	}
+	scope := 1
+	for scope > 0 {
+		l := p.next()
+		switch l.Tok {
+		case lex.OpenParen:
+			scope++
+		case lex.CloseParen:
+			scope--
+		case lex.EOF:
+			scope = 0
 		}
 	}
-	return index
+	err.End = p.current.Start
+	p.errors = append(p.errors, err)
+	return errorNode{
+		err: err.Cause,
+	}
+}
+
+func Parse(lexemes chan lex.Lexeme) Node {
+	p := &parser{
+		lexemes: lexemes,
+	}
+	root := parseRoot(p)
+	return root
 }

@@ -1,69 +1,46 @@
 Lanuage specification for hippo-lang
 ====================================
-Hippo is a toy project i'm working on.
+Hippo is a toy project i'm working on. It's a typed language in the list family.
 
 Keywords
 --------
-| keyword       | description		       		 |
-| ------------- |--------------------------------|
-| import      	| import a directory             |
-| def     		| bind a type instance to a name |
-| match      	| define a match block           |
+| keyword       | description                      |
+| ------------- | -------------------------------- |
+| type      	  | define a type                    |
+| func      	  | define a function                |
 
-Operators
----------
-| operator      | description		       		 |
-| ------------- |--------------------------------|
-| +          	| add two numbers             	 |
-| -          	| subtract two numbers           |
-| *          	| multiply two numbers           |
-| /          	| divide two numbers             |
-| ^          	| raise a number to another      |
-| (          	| opening parentheses            |
-| )          	| closing parentheses            |
-| //          	| single line comment            |
-| /*         	| multi line comment start       |
-| */         	| multi line comment end         |
-| _          	| empty matcher             	 |
+Tokens
+------
+| token         | regex     		       		        |
+| ------------- | -------------------------------- |
+| Space    		 | [ \n]+                           |
+| Colon    		 | :                                |
+| OpenParen     | (                                |
+| CloseParen    | )                                |
+| Comment       | //.*                             |
 
-Type literals
--------------
-| type       	| example		       		 	 |
-| ------------- |--------------------------------|
-| string      	| ""             				 |
-| number     	| 1 							 |
-| function      | [] ->           				 |
-
-Builtin functions
------------------
-| function      | description		       		 |
-| ------------- |--------------------------------|
-| push      	| push an element onto a list    |
-| join     		| join two lists 				 |
-| pop      		| pop an element from a list     |
-| head      	| get the head of a list         |
-| tail      	| get the tail of a list         |
-| len      		| get the length of a list       |
-| print      	| print a value				     |
-
+Primitives
+----------
+| type       	 | example		       		 	        |
+| ------------- | -------------------------------- |
+| string      	| "1"            		         		 |
+| int      	   | 1 							                 |
+| float       	| 1.0 						                 |
 
 Code sample
 -----------
-```
-import github.com/emilsjolander/hippo/stdlib
-import helpers
+```lisp
 
-def pi 3.14159
+(type vec3
+	x:float
+	y:float
+	z:float)
 
-def fib [n] ->
-	match n:
-		0 	-> 0
-		1 	-> 1
-		_ 	-> fib(n-1) + fib(n-2)
+(func dot:float v1:vec3 v2:vec3
+	(+ (* v1.x v2.x)
+		 (* v1.y v2.y)
+		 (* v1.z v2.z)))
 
-def map [l, f] ->
-	match len(l):
-		0 	-> []
-		1 	-> [f(head(l))]
-		_ 	-> push (f(head(l)), map(tail(l), f))
+(print (dot (vec3 1 1 1) (vec3 2 2 2)))
+
 ```
