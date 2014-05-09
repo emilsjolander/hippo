@@ -6,26 +6,25 @@ Keywords
 --------
 | keyword       | description                      |
 | ------------- | -------------------------------- |
-| type      	  | define a type                    |
-| func      	  | define a function                |
+| type      	  | define a type                  |
+| func      	  | define a function              |
 
 Tokens
 ------
-| token         | regex     		       		        |
+| type         	| token     		       		   |
 | ------------- | -------------------------------- |
-| Space    		 | [ \n]+                           |
-| Colon    		 | :                                |
+| Colon    		| :                                |
 | OpenParen     | (                                |
 | CloseParen    | )                                |
-| Comment       | //.*                             |
+| Comment       | #                                |
 
 Primitives
 ----------
-| type       	 | example		       		 	        |
+| type       	| example		       		 	   |
 | ------------- | -------------------------------- |
-| string      	| "1"            		         		 |
-| int      	   | 1 							                 |
-| float       	| 1.0 						                 |
+| string      	| "1"            		           |
+| int      	   	| 1 							   |
+| float       	| 1.0 						       |
 
 Code sample
 -----------
@@ -39,6 +38,6 @@ Code sample
 	(+ 	(* v1.x v2.x)
 		(* v1.y v2.y)))
 
-(print (dot (vec2 1 1) (vec2 2 2)))
+(print (dot (vec2 1.0 1.0) (vec2 2.0 2.0)))
 
 ```

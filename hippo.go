@@ -17,7 +17,7 @@ const program = `
 	(+ 	(* v1.x v2.x)
 		(* v1.y v2.y)))
 
-(print (dot (vec2 1 1) (vec2 2 2)))
+(print (dot (vec2 1.0 1.0) (vec2 2.0 2.0)))
 
 `
 
