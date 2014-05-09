@@ -2,6 +2,7 @@ package parse
 
 import (
 	"fmt"
+
 	"github.com/emilsjolander/hippo/lex"
 )
 

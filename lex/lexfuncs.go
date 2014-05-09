@@ -1,6 +1,8 @@
 package lex
 
-import "fmt"
+import (
+	"fmt"
+)
 
 const (
 	numbers = "0123456789"
@@ -9,6 +11,14 @@ const (
 
 func root(l *lexer) lexFunc {
 	l.ignoreSpace()
+
+	if l.acceptOne("#") {
+		for l.next() != '\n' {
+			// skip until new line
+		}
+		l.ignore()
+		return root
+	}
 
 	if l.acceptOne("0123456789") {
 		l.backup()

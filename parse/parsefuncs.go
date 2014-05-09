@@ -2,6 +2,7 @@ package parse
 
 import (
 	"errors"
+
 	"github.com/emilsjolander/hippo/lex"
 )
 
