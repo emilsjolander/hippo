@@ -13,5 +13,5 @@ type Error struct {
 }
 
 func (e Error) Error() string {
-	return fmt.Sprintf("Error starting at %v, ending at %v", e.Start, e.End)
+	return fmt.Sprintf("Error starting at %v, ending at %v: %s", e.Start, e.End, e.Cause)
 }

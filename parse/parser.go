@@ -7,39 +7,46 @@ import (
 )
 
 type parser struct {
-	lexemes   chan lex.Lexeme
-	current   lex.Lexeme
-	errors    []Error
-	eof       bool
-	hasPeaked bool
-	peaked    lex.Lexeme
+	lexemes []lex.Lexeme
+	errors  []error
+	pos     int
+}
+
+func Parse(lexemes []lex.Lexeme) (Node, []error) {
+	p := &parser{
+		lexemes: lexemes,
+		pos:     -1,
+	}
+	root := parseRoot(p)
+	return root, p.errors
 }
 
 func (p *parser) next() lex.Lexeme {
-	if p.hasPeaked {
-		p.hasPeaked = false
-		return p.peaked
+	p.pos++
+	if p.pos >= len(p.lexemes) {
+		p.pos = len(p.lexemes) - 1
 	}
-	if !p.eof {
-		p.current = <-p.lexemes
-		if p.current.Tok == lex.EOF {
-			p.eof = true
-		}
-	}
-	return p.current
+	return p.lexemes[p.pos]
+}
+
+func (p *parser) current() lex.Lexeme {
+	return p.lexemes[p.pos]
+}
+
+func (p *parser) backup() {
+	p.pos--
 }
 
 func (p *parser) peak() lex.Lexeme {
 	l := p.next()
-	p.hasPeaked = true
-	p.peaked = l
+	p.backup()
 	return l
 }
 
 func (p *parser) errorf(cause string, args ...interface{}) errorNode {
 	err := Error{
 		Cause: fmt.Sprintf(cause, args...),
-		Start: p.current.Start,
+		Start: p.current().Start,
 	}
 	scope := 1
 	for scope > 0 {
@@ -53,17 +60,9 @@ func (p *parser) errorf(cause string, args ...interface{}) errorNode {
 			scope = 0
 		}
 	}
-	err.End = p.current.Start
+	err.End = p.current().Start
 	p.errors = append(p.errors, err)
 	return errorNode{
 		err: err.Cause,
 	}
-}
-
-func Parse(lexemes chan lex.Lexeme) Node {
-	p := &parser{
-		lexemes: lexemes,
-	}
-	root := parseRoot(p)
-	return root
 }

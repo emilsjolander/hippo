@@ -33,7 +33,11 @@ func printAst(root Node, lvl int) {
 			fmt.Println(prefix + p.Name + ":" + p.Typ)
 		}
 	case FuncDeclaration:
-		fmt.Println(prefix + "FuncDeclaration: " + t.Name)
+		props := t.Name + ":" + t.Typ
+		for _, p := range t.Args {
+			props += " " + p.Name + ":" + p.Typ
+		}
+		fmt.Println(prefix + "FuncDeclaration: " + props)
 		printAst(t.Body, lvl+1)
 	case Literal:
 		fmt.Println(prefix + "Literal: " + t.Val)

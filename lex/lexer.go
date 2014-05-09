@@ -14,30 +14,28 @@ type lexer struct {
 
 	startPos Pos
 
-	lexemes chan Lexeme
+	lexemes []Lexeme
+	errored bool
 }
 
 const eof = rune(-1)
 
 type lexFunc func(*lexer) lexFunc
 
-func Lex(input string) chan Lexeme {
+func Lex(input string) ([]Lexeme, bool) {
 	l := &lexer{
 		input:    input,
-		lexemes:  make(chan Lexeme),
+		lexemes:  make([]Lexeme, 0),
 		startPos: Pos{1, 1},
 	}
-	go func() {
-		for state := root; state != nil; {
-			if l.peak() == eof {
-				l.emit(EOF)
-				break
-			}
-			state = state(l)
+	for state := root; state != nil; {
+		if l.peak() == eof {
+			l.emit(EOF)
+			break
 		}
-		close(l.lexemes)
-	}()
-	return l.lexemes
+		state = state(l)
+	}
+	return l.lexemes, l.errored
 }
 
 func (l *lexer) updateStartPos() {
@@ -58,21 +56,22 @@ func (l *lexer) match() string {
 }
 
 func (l *lexer) emit(tok Token) {
-	l.lexemes <- Lexeme{
+	l.lexemes = append(l.lexemes, Lexeme{
 		Tok:   tok,
 		Val:   l.match(),
 		Start: l.startPos,
-	}
+	})
 	l.updateStartPos()
 }
 
 func (l *lexer) emitError(err error) {
-	l.lexemes <- Lexeme{
+	l.lexemes = append(l.lexemes, Lexeme{
 		Tok:   Error,
 		Val:   err.Error(),
 		Start: l.startPos,
-	}
-	l.ignore()
+	})
+	l.errored = true
+	l.updateStartPos()
 }
 
 func (l *lexer) ignoreSpace() {

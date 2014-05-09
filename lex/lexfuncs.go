@@ -41,11 +41,6 @@ func root(l *lexer) lexFunc {
 		return root
 	}
 
-	if l.acceptOne(":") {
-		l.emit(Colon)
-		return identifier
-	}
-
 	return identifier
 }
 
@@ -72,6 +67,11 @@ func identifier(l *lexer) lexFunc {
 
 	if l.acceptOne(".") {
 		l.emit(Dot)
+		return identifier
+	}
+
+	if l.acceptOne(":") {
+		l.emit(Colon)
 		return identifier
 	}
 

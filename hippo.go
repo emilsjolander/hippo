@@ -9,25 +9,36 @@ import (
 
 const program = `
 
+# type definition
 (type vec2
 	x:float
 	y:float)
 
+# function definition
 (func dot:float v1:vec2 v2:vec2
 	(+ 	(* v1.x v2.x)
 		(* v1.y v2.y)))
 
+# executed when running script
 (print (dot (vec2 1.0 1.0) (vec2 2.0 2.0)))
 
 `
 
 func main() {
-	lexemes := lex.Lex(program)
-	for l := range lexemes {
+	lexemes, errored := lex.Lex(program)
+	for _, l := range lexemes {
 		fmt.Println(l)
 	}
+	if errored {
+		return
+	}
 
-	lexemes = lex.Lex(program)
-	ast := parse.Parse(lexemes)
+	ast, errors := parse.Parse(lexemes)
+	if errors != nil {
+		for _, e := range errors {
+			fmt.Println(e)
+		}
+		return
+	}
 	parse.PrintAst(ast)
 }
