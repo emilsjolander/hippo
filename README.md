@@ -1,6 +1,6 @@
 Lanuage specification for hippo-lang
 ====================================
-Hippo is a toy project i'm working on. It's a typed language in the list family.
+Hippo is a toy project i'm working on. It's a statically typed language with inspirations from lisp.
 
 Keywords
 --------
