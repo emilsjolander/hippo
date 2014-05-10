@@ -44,7 +44,7 @@ var (
 			typ:  "_",
 			args: []ast.Property{
 				ast.Property{
-					Typ: "_any",
+					Typ: "float",
 				},
 			},
 		},

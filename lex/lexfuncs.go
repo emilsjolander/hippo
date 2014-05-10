@@ -8,7 +8,7 @@ const (
 	numbers   = "0123456789"
 	alphas    = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	operators = "+-/^*%"
-	specials  = "_?!"
+	specials  = "_"
 )
 
 func root(l *lexer) lexFunc {

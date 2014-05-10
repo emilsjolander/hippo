@@ -44,7 +44,7 @@ func (p *parser) peak() lex.Lexeme {
 	return l
 }
 
-func (p *parser) errorf(cause string, args ...interface{}) ast.Error {
+func (p *parser) errorf(cause string, args ...interface{}) *ast.Error {
 	err := Error{
 		Cause: fmt.Sprintf(cause, args...),
 		Start: p.current().Start,
@@ -63,7 +63,7 @@ func (p *parser) errorf(cause string, args ...interface{}) ast.Error {
 	}
 	err.End = p.current().Start
 	p.errors = append(p.errors, err)
-	return ast.Error{
+	return &ast.Error{
 		Err: err.Cause,
 	}
 }

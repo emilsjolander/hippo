@@ -14,11 +14,11 @@ type basicNode struct {
 	EndPos   lex.Pos
 }
 
-func (n basicNode) Start() lex.Pos {
+func (n *basicNode) Start() lex.Pos {
 	return n.StartPos
 }
 
-func (n basicNode) End() lex.Pos {
+func (n *basicNode) End() lex.Pos {
 	return n.EndPos
 }
 
@@ -34,8 +34,9 @@ type Identifier struct {
 
 type Expression struct {
 	basicNode
-	Name string
-	Args []Node
+	Name     string
+	ArgTypes []string
+	Args     []Node
 }
 
 type Property struct {
@@ -60,14 +61,14 @@ type Root struct {
 	Nodes []Node
 }
 
-func (r Root) Start() lex.Pos {
+func (r *Root) Start() lex.Pos {
 	if len(r.Nodes) == 0 {
 		return lex.Pos{Row: 0, Col: 0}
 	}
 	return r.Nodes[0].Start()
 }
 
-func (r Root) End() lex.Pos {
+func (r *Root) End() lex.Pos {
 	if len(r.Nodes) == 0 {
 		return lex.Pos{Row: 0, Col: 0}
 	}
@@ -80,11 +81,11 @@ type Literal struct {
 	Val      string
 }
 
-func (l Literal) Start() lex.Pos {
+func (l *Literal) Start() lex.Pos {
 	return l.StartPos
 }
 
-func (l Literal) End() lex.Pos {
+func (l *Literal) End() lex.Pos {
 	return lex.Pos{
 		Row: l.StartPos.Row,
 		Col: l.StartPos.Col + len(l.Val),

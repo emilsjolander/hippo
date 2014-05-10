@@ -5,6 +5,7 @@ import (
 
 	"github.com/emilsjolander/hippo/ast"
 	"github.com/emilsjolander/hippo/check"
+	"github.com/emilsjolander/hippo/gen"
 	"github.com/emilsjolander/hippo/lex"
 	"github.com/emilsjolander/hippo/parse"
 )
@@ -35,20 +36,22 @@ func main() {
 		return
 	}
 
-	astNode, errors := parse.Parse(lexemes)
+	root, errors := parse.Parse(lexemes)
 	if errors != nil {
 		for _, e := range errors {
 			fmt.Println(e)
 		}
 		return
 	}
-	ast.Print(astNode)
+	ast.Print(root)
 
-	errors = check.Check(astNode)
+	errors = check.Check(root)
 	if errors != nil {
 		for _, e := range errors {
 			fmt.Println(e)
 		}
 		return
 	}
+
+	new(gen.JS).Write(root, "bin")
 }

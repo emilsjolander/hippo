@@ -152,7 +152,7 @@ func (s *scope) getExpressionType(c *checker, name string, types []string) strin
 	for _, f := range s.funcs {
 		if name == f.name {
 			for i, a := range f.args {
-				if types[i] != a.Typ && a.Typ != "_any" {
+				if types[i] != a.Typ {
 					goto continueCheckFuncs
 				}
 			}

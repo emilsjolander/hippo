@@ -28,10 +28,10 @@ func Check(root ast.Node) []error {
 		},
 	}
 	switch n := root.(type) {
-	case ast.Root:
+	case *ast.Root:
 		checkRoot(c, n)
 	default:
-		c.errorf("Root ast node must be of type ast.Root")
+		c.errorf("Root ast node must be of type *ast.Root")
 	}
 	return c.errors
 }

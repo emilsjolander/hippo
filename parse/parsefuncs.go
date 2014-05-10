@@ -8,7 +8,7 @@ import (
 )
 
 func parseRoot(p *parser) ast.Node {
-	root := ast.Root{}
+	root := &ast.Root{}
 	for l := p.next(); l.Tok != lex.EOF; l = p.next() {
 		if l.Tok != lex.OpenParen {
 			return p.errorf("Unexpected token %v, expected %v", l.Tok, lex.OpenParen)
@@ -33,7 +33,7 @@ func parseInsideParen(p *parser) ast.Node {
 }
 
 func parseFuncDeclaration(p *parser) ast.Node {
-	decl := ast.FuncDeclaration{}
+	decl := &ast.FuncDeclaration{}
 	decl.StartPos = p.current().Start
 
 	// parse until start of function body
@@ -73,7 +73,7 @@ func parseFuncDeclaration(p *parser) ast.Node {
 }
 
 func parseTypeDeclaration(p *parser) ast.Node {
-	decl := ast.TypeDeclaration{}
+	decl := &ast.TypeDeclaration{}
 	decl.StartPos = p.current().Start
 
 	// make sure type name exists
@@ -101,7 +101,7 @@ func parseTypeDeclaration(p *parser) ast.Node {
 
 func parseExpression(p *parser) ast.Node {
 	// identifier of expression has allready been parsed, get it
-	expr := ast.Expression{
+	expr := &ast.Expression{
 		Name: p.current().Val,
 	}
 	expr.StartPos = p.current().Start
@@ -126,7 +126,7 @@ func parseExpression(p *parser) ast.Node {
 		default:
 			// a literal argument
 			if l.Tok.IsLiteral() {
-				expr.Args = append(expr.Args, ast.Literal{
+				expr.Args = append(expr.Args, &ast.Literal{
 					StartPos: l.Start,
 					Typ:      l.Tok.String(),
 					Val:      l.Val,
@@ -145,7 +145,7 @@ finished:
 
 func parseIdentifier(p *parser) ast.Node {
 	// identifier name has allready been parsed, get it
-	iden := ast.Identifier{
+	iden := &ast.Identifier{
 		Parts: []string{p.current().Val},
 	}
 	iden.StartPos = p.current().Start
