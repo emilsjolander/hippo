@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 
+	"github.com/emilsjolander/hippo/ast"
+	"github.com/emilsjolander/hippo/check"
 	"github.com/emilsjolander/hippo/lex"
 	"github.com/emilsjolander/hippo/parse"
 )
@@ -33,12 +35,20 @@ func main() {
 		return
 	}
 
-	ast, errors := parse.Parse(lexemes)
+	astNode, errors := parse.Parse(lexemes)
 	if errors != nil {
 		for _, e := range errors {
 			fmt.Println(e)
 		}
 		return
 	}
-	parse.PrintAst(ast)
+	ast.Print(astNode)
+
+	errors = check.Check(astNode)
+	if errors != nil {
+		for _, e := range errors {
+			fmt.Println(e)
+		}
+		return
+	}
 }

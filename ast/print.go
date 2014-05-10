@@ -1,19 +1,19 @@
-package parse
+package ast
 
 import (
 	"fmt"
 	"strings"
 )
 
-func PrintAst(root Node) {
+func Print(root Node) {
 	printAst(root, 0)
 }
 
 func printAst(root Node, lvl int) {
 	prefix := strings.Repeat("  ", lvl)
 	switch t := root.(type) {
-	case errorNode:
-		fmt.Println(prefix + "errorNode: " + t.err)
+	case Error:
+		fmt.Println(prefix + "errorNode: " + t.Err)
 	case Root:
 		fmt.Println(prefix + "Root")
 		for _, n := range t.Nodes {

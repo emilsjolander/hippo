@@ -3,6 +3,7 @@ package parse
 import (
 	"fmt"
 
+	"github.com/emilsjolander/hippo/ast"
 	"github.com/emilsjolander/hippo/lex"
 )
 
@@ -12,7 +13,7 @@ type parser struct {
 	pos     int
 }
 
-func Parse(lexemes []lex.Lexeme) (Node, []error) {
+func Parse(lexemes []lex.Lexeme) (ast.Node, []error) {
 	p := &parser{
 		lexemes: lexemes,
 		pos:     -1,
@@ -43,7 +44,7 @@ func (p *parser) peak() lex.Lexeme {
 	return l
 }
 
-func (p *parser) errorf(cause string, args ...interface{}) errorNode {
+func (p *parser) errorf(cause string, args ...interface{}) ast.Error {
 	err := Error{
 		Cause: fmt.Sprintf(cause, args...),
 		Start: p.current().Start,
@@ -62,7 +63,7 @@ func (p *parser) errorf(cause string, args ...interface{}) errorNode {
 	}
 	err.End = p.current().Start
 	p.errors = append(p.errors, err)
-	return errorNode{
-		err: err.Cause,
+	return ast.Error{
+		Err: err.Cause,
 	}
 }

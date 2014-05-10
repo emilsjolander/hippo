@@ -1,4 +1,4 @@
-package parse
+package ast
 
 import (
 	"github.com/emilsjolander/hippo/lex"
@@ -10,21 +10,21 @@ type Node interface {
 }
 
 type basicNode struct {
-	start lex.Pos
-	end   lex.Pos
+	StartPos lex.Pos
+	EndPos   lex.Pos
 }
 
 func (n basicNode) Start() lex.Pos {
-	return n.start
+	return n.StartPos
 }
 
 func (n basicNode) End() lex.Pos {
-	return n.end
+	return n.EndPos
 }
 
-type errorNode struct {
+type Error struct {
 	basicNode
-	err string
+	Err string
 }
 
 type Identifier struct {
@@ -36,6 +36,11 @@ type Expression struct {
 	basicNode
 	Name string
 	Args []Node
+}
+
+type Property struct {
+	Name string
+	Typ  string
 }
 
 type TypeDeclaration struct {
@@ -70,18 +75,18 @@ func (r Root) End() lex.Pos {
 }
 
 type Literal struct {
-	start lex.Pos
-	Typ   lex.Token
-	Val   string
+	StartPos lex.Pos
+	Typ      string
+	Val      string
 }
 
 func (l Literal) Start() lex.Pos {
-	return l.start
+	return l.StartPos
 }
 
 func (l Literal) End() lex.Pos {
 	return lex.Pos{
-		Row: l.start.Row,
-		Col: l.start.Col + len(l.Val),
+		Row: l.StartPos.Row,
+		Col: l.StartPos.Col + len(l.Val),
 	}
 }

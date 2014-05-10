@@ -27,29 +27,29 @@ const (
 func (t Token) String() string {
 	switch t {
 	case Error:
-		return "Error"
+		return "error"
 	case EOF:
-		return "EOF"
+		return "eof"
 	case OpenParen:
-		return "OpenParen"
+		return "openparen"
 	case CloseParen:
-		return "CloseParen"
+		return "closeparen"
 	case Colon:
-		return "Colon"
+		return "colon"
 	case Type:
-		return "Type"
+		return "type"
 	case Function:
-		return "Function"
+		return "func"
 	case Identifier:
-		return "Identifier"
+		return "identifier"
 	case Dot:
-		return "Dot"
+		return "dot"
 	case Float:
-		return "Float"
+		return "float"
 	case Integer:
-		return "Integer"
+		return "int"
 	case String:
-		return "String"
+		return "string"
 	}
 	panic("Forgot to add string representation for some token")
 }

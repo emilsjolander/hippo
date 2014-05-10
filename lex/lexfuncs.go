@@ -5,8 +5,10 @@ import (
 )
 
 const (
-	numbers = "0123456789"
-	alphas  = "abcdefghijklmnopqrstuvwxyz_ABCDEFGHIJKLMNOPQRSTUVWXYZ+-/^*%"
+	numbers   = "0123456789"
+	alphas    = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	operators = "+-/^*%"
+	specials  = "_?!"
 )
 
 func root(l *lexer) lexFunc {
@@ -45,12 +47,12 @@ func root(l *lexer) lexFunc {
 }
 
 func identifier(l *lexer) lexFunc {
-	if !l.acceptOne(alphas) {
+	if !l.acceptOne(alphas + operators) {
 		l.backup()
 		l.emitError(fmt.Errorf("Unexpected token for identifier: %c", l.peak()))
 		return nil
 	}
-	l.acceptMany(alphas + numbers)
+	l.acceptMany(alphas + operators + numbers + specials)
 
 	switch l.match() {
 	case "type":
