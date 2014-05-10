@@ -130,7 +130,7 @@ func (s *scope) unregisterVar(c *checker, variable ast.Property) {
 			return
 		}
 	}
-	c.errorf("Unfined varable %s", variable.Name)
+	c.errorf("Undefined varable %s", variable.Name)
 }
 
 func (s *scope) getExpressionType(c *checker, name string, types []string) string {
@@ -161,7 +161,7 @@ func (s *scope) getExpressionType(c *checker, name string, types []string) strin
 	continueCheckFuncs:
 	}
 
-	c.errorf("Unfined function or type %s for input arguments of type %v", name, types)
+	c.errorf("Undefined function or type %s for input arguments of type %v", name, types)
 	return undefined
 }
 
@@ -171,7 +171,7 @@ func (s *scope) getVariableType(c *checker, name string) string {
 			return v.Typ
 		}
 	}
-	c.errorf("Unfined variable %s", name)
+	c.errorf("Undefined variable %s", name)
 	return undefined
 }
 

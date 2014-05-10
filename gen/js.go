@@ -113,7 +113,7 @@ func (js *JS) writeExpression(e *ast.Expression) {
 			js.putf(",")
 		}
 	}
-	js.putf(")")
+	js.putf(")\n")
 }
 
 func (js *JS) writeLiteral(l *ast.Literal) {

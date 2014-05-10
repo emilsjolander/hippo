@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 
-	"github.com/emilsjolander/hippo/ast"
 	"github.com/emilsjolander/hippo/check"
 	"github.com/emilsjolander/hippo/gen"
 	"github.com/emilsjolander/hippo/lex"
@@ -22,17 +21,21 @@ const program = `
 	(+ 	(* v1.x v2.x)
 		(* v1.y v2.y)))
 
+# implement increment operator
+(func ++:float f:float (+ f 1.0))
+
 # executed when running script
 (print (dot (vec2 1.0 1.0) (vec2 2.0 2.0)))
+(print (++ 1.0))
 
 `
 
 func main() {
 	lexemes, errored := lex.Lex(program)
-	for _, l := range lexemes {
-		fmt.Println(l)
-	}
 	if errored {
+		for _, l := range lexemes {
+			fmt.Println(l)
+		}
 		return
 	}
 
@@ -43,7 +46,6 @@ func main() {
 		}
 		return
 	}
-	ast.Print(root)
 
 	errors = check.Check(root)
 	if errors != nil {
