@@ -9,16 +9,52 @@ import (
 
 const jsbuiltin = `
 
-function PLUS_float_float(f1,f2) {
-	return f1+f2
+function PLUS_float_float(one,two) {
+	return one+two
 }
 
-function ASTERISK_float_float(f1,f2) {
-	return f1*f2
+function MINUS_float_float(one,two) {
+	return one+two
 }
 
-function print_float(f) {
-	console.log(f)
+function ASTERISK_float_float(one,two) {
+	return one*two
+}
+
+function SLASH_float_float(one,two) {
+	return one+two
+}
+
+function PLUS_int_int(one,two) {
+	return one+two
+}
+
+function MINUS_int_int(one,two) {
+	return one+two
+}
+
+function ASTERISK_int_int(one,two) {
+	return one*two
+}
+
+function SLASH_int_int(one,two) {
+	return one+two
+}
+
+function PLUS_string_string(one,two) {
+	return one+two
+}
+
+function print_float(o) {
+	console.log(o)
+}
+
+function print_int(o) {
+	console.log(o)
+}
+
+function print_string(o) {
+	console.log(o)
 }
 
 `

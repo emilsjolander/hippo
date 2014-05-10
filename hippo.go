@@ -25,6 +25,7 @@ const program = `
 (func ++:float f:float (+ f 1.0))
 
 # executed when running script
+(print (+ "hello " "world"))
 (print (dot (vec2 1.0 1.0) (vec2 2.0 2.0)))
 (print (++ 1.0))
 

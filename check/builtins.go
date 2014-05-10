@@ -28,6 +28,18 @@ var (
 			},
 		},
 		&function{
+			name: "-",
+			typ:  "float",
+			args: []ast.Property{
+				ast.Property{
+					Typ: "float",
+				},
+				ast.Property{
+					Typ: "float",
+				},
+			},
+		},
+		&function{
 			name: "*",
 			typ:  "float",
 			args: []ast.Property{
@@ -40,11 +52,101 @@ var (
 			},
 		},
 		&function{
+			name: "/",
+			typ:  "float",
+			args: []ast.Property{
+				ast.Property{
+					Typ: "float",
+				},
+				ast.Property{
+					Typ: "float",
+				},
+			},
+		},
+		&function{
+			name: "+",
+			typ:  "int",
+			args: []ast.Property{
+				ast.Property{
+					Typ: "int",
+				},
+				ast.Property{
+					Typ: "int",
+				},
+			},
+		},
+		&function{
+			name: "-",
+			typ:  "int",
+			args: []ast.Property{
+				ast.Property{
+					Typ: "int",
+				},
+				ast.Property{
+					Typ: "int",
+				},
+			},
+		},
+		&function{
+			name: "*",
+			typ:  "int",
+			args: []ast.Property{
+				ast.Property{
+					Typ: "int",
+				},
+				ast.Property{
+					Typ: "int",
+				},
+			},
+		},
+		&function{
+			name: "/",
+			typ:  "int",
+			args: []ast.Property{
+				ast.Property{
+					Typ: "int",
+				},
+				ast.Property{
+					Typ: "int",
+				},
+			},
+		},
+		&function{
+			name: "+",
+			typ:  "string",
+			args: []ast.Property{
+				ast.Property{
+					Typ: "string",
+				},
+				ast.Property{
+					Typ: "string",
+				},
+			},
+		},
+		&function{
 			name: "print",
 			typ:  "_",
 			args: []ast.Property{
 				ast.Property{
 					Typ: "float",
+				},
+			},
+		},
+		&function{
+			name: "print",
+			typ:  "_",
+			args: []ast.Property{
+				ast.Property{
+					Typ: "int",
+				},
+			},
+		},
+		&function{
+			name: "print",
+			typ:  "_",
+			args: []ast.Property{
+				ast.Property{
+					Typ: "string",
 				},
 			},
 		},
