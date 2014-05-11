@@ -1,0 +1,25 @@
+
+# type definition
+(type vec2
+	x:float
+	y:float)
+
+# function definition
+(func dot:float v1:vec2 v2:vec2
+	(+ 	(* v1.x v2.x)
+		(* v1.y v2.y)))
+
+# implement increment operator
+(func ++:float f:float (+ f 1.0))
+
+# fibonacci function
+#(func fib:int i:int 
+#	(if (< i 2) i
+#		(+  (fib (- i 1))
+#			(fib (- i 2))))
+
+# executed when running script
+(print (+ "hello " "world"))
+(print (dot (vec2 1.0 1.0) (vec2 2.0 2.0)))
+(print (++ 1.0))
+#(print (fib 5))

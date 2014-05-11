@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
+	"os"
 
 	"github.com/emilsjolander/hippo/check"
 	"github.com/emilsjolander/hippo/gen"
@@ -9,30 +11,22 @@ import (
 	"github.com/emilsjolander/hippo/parse"
 )
 
-const program = `
+/*
+	TODO:
+		- All nodes should have a types, add Type() to the node interface
+		- Nodes without type should have the builtin 'void' type
+		- Remove types property from expression node. Types can be taken from arg nodes with new Type() method
 
-# type definition
-(type vec2
-	x:float
-	y:float)
-
-# function definition
-(func dot:float v1:vec2 v2:vec2
-	(+ 	(* v1.x v2.x)
-		(* v1.y v2.y)))
-
-# implement increment operator
-(func ++:float f:float (+ f 1.0))
-
-# executed when running script
-(print (+ "hello " "world"))
-(print (dot (vec2 1.0 1.0) (vec2 2.0 2.0)))
-(print (++ 1.0))
-
-`
+*/
 
 func main() {
-	lexemes, errored := lex.Lex(program)
+	scriptName := os.Args[1]
+	script, err := ioutil.ReadFile(scriptName + ".hippo")
+	if err != nil {
+		panic(err)
+	}
+
+	lexemes, errored := lex.Lex(string(script))
 	if errored {
 		for _, l := range lexemes {
 			fmt.Println(l)
@@ -56,5 +50,5 @@ func main() {
 		return
 	}
 
-	new(gen.JS).Write(root, "bin")
+	new(gen.JS).Write(root, "bin", scriptName)
 }

@@ -21,6 +21,7 @@ const (
 	Float
 	Integer
 	String
+	Boolean
 	tokenLiteralEnd
 )
 
@@ -50,6 +51,8 @@ func (t Token) String() string {
 		return "int"
 	case String:
 		return "string"
+	case Boolean:
+		return "bool"
 	}
 	panic("Forgot to add string representation for some token")
 }

@@ -63,9 +63,9 @@ type JS struct {
 	basicGenerator
 }
 
-func (js *JS) Write(root ast.Node, dir string) {
+func (js *JS) Write(root ast.Node, dir string, name string) {
 	os.MkdirAll(dir, os.ModePerm)
-	f, err := os.Create(dir + "/output.js")
+	f, err := os.Create(dir + "/" + name + ".js")
 	if err != nil {
 		panic(err)
 	}
