@@ -40,12 +40,22 @@ Code sample
 	(+ 	(* v1.x v2.x)
 		(* v1.y v2.y)))
 
-# implement increment operator
-(func ++:float f:float (+ f 1.0))
+# fibonacci function
+(func fib:int i:int
+	(if (< i 2) 1
+		(+  (fib (- i 2))
+			(fib (- i 1)))))
+
+# pow operator
+(func ^:int i:int e:int (^' i i e))
+(func ^':int v:int i:int e:int
+	(if (= e 0) 1 
+		(if (= e 1) v
+			(^' (* v i) i (- e 1)))))
 
 # executed when running script
 (print (dot (vec2 1.0 1.0) (vec2 2.0 2.0)))
-(print (++ 1.0))
-
+(print (fib 10))
+(print (^ 10 3))
 
 ```
