@@ -59,6 +59,8 @@ func translateName(name string) string {
 			translated += "EQUALS"
 		case '%':
 			translated += "PERCENT"
+		case '\'':
+			translated += "PRIM"
 		default:
 			translated += string(r)
 		}

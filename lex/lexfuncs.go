@@ -7,7 +7,7 @@ import (
 const (
 	numbers   = "0123456789"
 	alphas    = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	operators = "+-/^*%<>="
+	operators = "+-/^*%<>='"
 	specials  = "_"
 )
 
