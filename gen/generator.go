@@ -50,7 +50,13 @@ func translateName(name string) string {
 		case '/':
 			translated += "SLASH"
 		case '^':
-			translated += "CARET"
+			translated += "CARET_UP"
+		case '<':
+			translated += "CARET_LEFT"
+		case '>':
+			translated += "CARET_RIGHT"
+		case '=':
+			translated += "EQUALS"
 		case '%':
 			translated += "PERCENT"
 		default:

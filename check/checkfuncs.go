@@ -42,13 +42,14 @@ func checkRoot(c *checker, r *ast.Root) {
 				c.scope.unregisterVar(c, a)
 			}
 		}
+
 		if e, ok := n.(*ast.Expression); ok {
 			checkExpression(c, e)
 		}
 	}
 }
 
-func checkExpression(c *checker, e *ast.Expression) string {
+func checkExpression(c *checker, e *ast.Expression) {
 	c.scope.push(e)
 	defer c.scope.pop()
 
@@ -56,25 +57,34 @@ func checkExpression(c *checker, e *ast.Expression) string {
 	for _, a := range e.Args {
 		switch n := a.(type) {
 		case *ast.Identifier:
-			types = append(types, checkIdentifier(c, n))
+			checkIdentifier(c, n)
 		case *ast.Expression:
-			types = append(types, checkExpression(c, n))
-		case *ast.Literal:
-			types = append(types, n.Typ)
+			checkExpression(c, n)
 		}
+		types = append(types, a.Type())
 	}
-	e.ArgTypes = types
 
-	return c.scope.getExpressionType(c, e.Name, types)
+	if e.Name == "if" {
+		if len(types) != 3 {
+			c.errorf("An if statment must have exactly three parameters")
+			return
+		}
+		if types[1] != types[2] {
+			c.errorf("Both the if and the else expressions must be of the same type")
+			return
+		}
+		e.Typ = types[1]
+	} else {
+		e.Typ = c.scope.getExpressionType(c, e.Name, types)
+	}
 }
 
-func checkIdentifier(c *checker, i *ast.Identifier) string {
+func checkIdentifier(c *checker, i *ast.Identifier) {
 	c.scope.push(i)
 	defer c.scope.pop()
 
-	typ := c.scope.getVariableType(c, i.Parts[0])
+	i.Typ = c.scope.getVariableType(c, i.Parts[0])
 	for _, p := range i.Parts[1:] {
-		typ = c.scope.getPropertyType(c, typ, p)
+		i.Typ = c.scope.getPropertyType(c, i.Typ, p)
 	}
-	return typ
 }

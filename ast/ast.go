@@ -7,11 +7,13 @@ import (
 type Node interface {
 	Start() lex.Pos
 	End() lex.Pos
+	Type() string
 }
 
 type basicNode struct {
 	StartPos lex.Pos
 	EndPos   lex.Pos
+	Typ      string
 }
 
 func (n *basicNode) Start() lex.Pos {
@@ -20,6 +22,10 @@ func (n *basicNode) Start() lex.Pos {
 
 func (n *basicNode) End() lex.Pos {
 	return n.EndPos
+}
+
+func (n *basicNode) Type() string {
+	return n.Typ
 }
 
 type Error struct {
@@ -34,9 +40,8 @@ type Identifier struct {
 
 type Expression struct {
 	basicNode
-	Name     string
-	ArgTypes []string
-	Args     []Node
+	Name string
+	Args []Node
 }
 
 type Property struct {
@@ -52,7 +57,7 @@ type TypeDeclaration struct {
 
 type FuncDeclaration struct {
 	basicNode
-	Property
+	Name string
 	Args []Property
 	Body Node
 }
@@ -75,6 +80,10 @@ func (r *Root) End() lex.Pos {
 	return r.Nodes[len(r.Nodes)-1].End()
 }
 
+func (r *Root) Type() string {
+	return ""
+}
+
 type Literal struct {
 	StartPos lex.Pos
 	Typ      string
@@ -90,4 +99,8 @@ func (l *Literal) End() lex.Pos {
 		Row: l.StartPos.Row,
 		Col: l.StartPos.Col + len(l.Val),
 	}
+}
+
+func (l *Literal) Type() string {
+	return l.Typ
 }

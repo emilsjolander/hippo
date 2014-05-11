@@ -14,7 +14,7 @@ function PLUS_float_float(one,two) {
 }
 
 function MINUS_float_float(one,two) {
-	return one+two
+	return one-two
 }
 
 function ASTERISK_float_float(one,two) {
@@ -22,7 +22,7 @@ function ASTERISK_float_float(one,two) {
 }
 
 function SLASH_float_float(one,two) {
-	return one+two
+	return one/two
 }
 
 function PLUS_int_int(one,two) {
@@ -30,7 +30,7 @@ function PLUS_int_int(one,two) {
 }
 
 function MINUS_int_int(one,two) {
-	return one+two
+	return one-two
 }
 
 function ASTERISK_int_int(one,two) {
@@ -38,11 +38,35 @@ function ASTERISK_int_int(one,two) {
 }
 
 function SLASH_int_int(one,two) {
-	return one+two
+	return one/two
 }
 
 function PLUS_string_string(one,two) {
 	return one+two
+}
+
+function CARET_LEFT_int_int(one,two) {
+	return one<two
+}
+
+function CARET_RIGHT_int_int(one,two) {
+	return one>two
+}
+
+function EQUALS_int_int(one,two) {
+	return one==two
+}
+
+function CARET_LEFT_float_float(one,two) {
+	return one<two
+}
+
+function CARET_RIGHT_float_float(one,two) {
+	return one>two
+}
+
+function EQUALS_float_float(one,two) {
+	return one==two
 }
 
 function print_float(o) {
@@ -54,6 +78,10 @@ function print_int(o) {
 }
 
 function print_string(o) {
+	console.log(o)
+}
+
+function print_bool(o) {
 	console.log(o)
 }
 
@@ -135,21 +163,45 @@ func (js *JS) writeFunc(f *ast.FuncDeclaration) {
 }
 
 func (js *JS) writeExpression(e *ast.Expression) {
-	js.putf("%s(", translateName(overloadedName(e.Name, e.ArgTypes)))
+	if e.Name == "if" {
+		js.writeIf(e)
+		return
+	}
+
+	types := make([]string, len(e.Args))
 	for i, a := range e.Args {
-		switch t := a.(type) {
-		case *ast.Literal:
-			js.writeLiteral(t)
-		case *ast.Expression:
-			js.writeExpression(t)
-		case *ast.Identifier:
-			js.writeIdentifier(t)
-		}
+		types[i] = a.Type()
+	}
+
+	js.putf("%s(", translateName(overloadedName(e.Name, types)))
+	for i, a := range e.Args {
+		js.writeValue(a)
 		if i != len(e.Args)-1 {
 			js.putf(",")
 		}
 	}
 	js.putf(")\n")
+}
+
+func (js *JS) writeValue(n ast.Node) {
+	switch t := n.(type) {
+	case *ast.Literal:
+		js.writeLiteral(t)
+	case *ast.Expression:
+		js.writeExpression(t)
+	case *ast.Identifier:
+		js.writeIdentifier(t)
+	}
+}
+
+func (js *JS) writeIf(e *ast.Expression) {
+	js.putf("(")
+	js.writeValue(e.Args[0])
+	js.putf("?")
+	js.writeValue(e.Args[1])
+	js.putf(":")
+	js.writeValue(e.Args[2])
+	js.putf(")")
 }
 
 func (js *JS) writeLiteral(l *ast.Literal) {

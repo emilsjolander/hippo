@@ -28,7 +28,7 @@ func parseInsideParen(p *parser) ast.Node {
 	case lex.Identifier:
 		return parseExpression(p)
 	}
-	return p.errorf("Unexpected token %v, expected on of %v, %v, or %v",
+	return p.errorf("Unexpected token %v, expected one of %v, %v, or %v",
 		l.Tok, lex.Function, lex.Type, lex.Identifier)
 }
 
@@ -132,7 +132,7 @@ func parseExpression(p *parser) ast.Node {
 					Val:      l.Val,
 				})
 			} else {
-				return p.errorf("Unexpected token %v, expected on of %v, %v, %v, or a type literal",
+				return p.errorf("Unexpected token %v, expected one of %v, %v, %v, or a type literal",
 					l.Tok, lex.Identifier, lex.OpenParen, lex.CloseParen)
 			}
 		}

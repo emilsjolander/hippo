@@ -7,7 +7,7 @@ import (
 const (
 	numbers   = "0123456789"
 	alphas    = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	operators = "+-/^*%"
+	operators = "+-/^*%<>="
 	specials  = "_"
 )
 
@@ -63,6 +63,9 @@ func identifier(l *lexer) lexFunc {
 		l.emit(Function)
 		l.ignoreSpace()
 		return identifier
+	case "true", "false":
+		l.emit(Boolean)
+		return root
 	}
 
 	l.emit(Identifier)

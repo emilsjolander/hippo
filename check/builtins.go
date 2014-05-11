@@ -13,6 +13,12 @@ var (
 		&typ{
 			name: "string",
 		},
+		&typ{
+			name: "bool",
+		},
+		&typ{
+			name: "void",
+		},
 	}
 	builtinFuncs = []*function{
 		&function{
@@ -112,6 +118,78 @@ var (
 			},
 		},
 		&function{
+			name: "<",
+			typ:  "bool",
+			args: []ast.Property{
+				ast.Property{
+					Typ: "int",
+				},
+				ast.Property{
+					Typ: "int",
+				},
+			},
+		},
+		&function{
+			name: ">",
+			typ:  "bool",
+			args: []ast.Property{
+				ast.Property{
+					Typ: "int",
+				},
+				ast.Property{
+					Typ: "int",
+				},
+			},
+		},
+		&function{
+			name: "=",
+			typ:  "bool",
+			args: []ast.Property{
+				ast.Property{
+					Typ: "int",
+				},
+				ast.Property{
+					Typ: "int",
+				},
+			},
+		},
+		&function{
+			name: "<",
+			typ:  "bool",
+			args: []ast.Property{
+				ast.Property{
+					Typ: "float",
+				},
+				ast.Property{
+					Typ: "float",
+				},
+			},
+		},
+		&function{
+			name: ">",
+			typ:  "bool",
+			args: []ast.Property{
+				ast.Property{
+					Typ: "float",
+				},
+				ast.Property{
+					Typ: "float",
+				},
+			},
+		},
+		&function{
+			name: "=",
+			typ:  "bool",
+			args: []ast.Property{
+				ast.Property{
+					Typ: "float",
+				},
+				ast.Property{
+					Typ: "float",
+				},
+			},
+		},
+		&function{
 			name: "+",
 			typ:  "string",
 			args: []ast.Property{
@@ -125,7 +203,7 @@ var (
 		},
 		&function{
 			name: "print",
-			typ:  "_",
+			typ:  "void",
 			args: []ast.Property{
 				ast.Property{
 					Typ: "float",
@@ -134,7 +212,7 @@ var (
 		},
 		&function{
 			name: "print",
-			typ:  "_",
+			typ:  "void",
 			args: []ast.Property{
 				ast.Property{
 					Typ: "int",
@@ -143,10 +221,19 @@ var (
 		},
 		&function{
 			name: "print",
-			typ:  "_",
+			typ:  "void",
 			args: []ast.Property{
 				ast.Property{
 					Typ: "string",
+				},
+			},
+		},
+		&function{
+			name: "print",
+			typ:  "void",
+			args: []ast.Property{
+				ast.Property{
+					Typ: "bool",
 				},
 			},
 		},

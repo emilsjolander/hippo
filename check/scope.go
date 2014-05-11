@@ -76,6 +76,9 @@ func (s *scope) registerFunc(c *checker, fun string, typ string, args []ast.Prop
 	// check types
 	for _, t := range s.types {
 		if fun == t.name {
+			if len(t.properties) != len(args) {
+				goto continueCheckTypes
+			}
 			for i, a := range t.properties {
 				if args[i].Typ != a.Typ {
 					goto continueCheckTypes
@@ -92,6 +95,9 @@ func (s *scope) registerFunc(c *checker, fun string, typ string, args []ast.Prop
 
 	for _, f := range s.funcs {
 		if fun == f.name {
+			if len(f.args) != len(args) {
+				goto continueCheckFuncs
+			}
 			for i, a := range f.args {
 				if args[i].Typ != a.Typ {
 					goto continueCheckFuncs
@@ -138,6 +144,9 @@ func (s *scope) getExpressionType(c *checker, name string, types []string) strin
 	// check types
 	for _, t := range s.types {
 		if name == t.name {
+			if len(t.properties) != len(types) {
+				goto continueCheckTypes
+			}
 			for i, a := range t.properties {
 				if types[i] != a.Typ {
 					goto continueCheckTypes
@@ -151,6 +160,9 @@ func (s *scope) getExpressionType(c *checker, name string, types []string) strin
 	// check functions
 	for _, f := range s.funcs {
 		if name == f.name {
+			if len(f.args) != len(types) {
+				goto continueCheckFuncs
+			}
 			for i, a := range f.args {
 				if types[i] != a.Typ {
 					goto continueCheckFuncs

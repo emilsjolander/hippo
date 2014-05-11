@@ -9,17 +9,18 @@
 	(+ 	(* v1.x v2.x)
 		(* v1.y v2.y)))
 
-# implement increment operator
-(func ++:float f:float (+ f 1.0))
+# implement de-increment operators
+(func -:int i:int (- i 1))
+(func --:int i:int (- i 2))
 
 # fibonacci function
-#(func fib:int i:int 
-#	(if (< i 2) i
-#		(+  (fib (- i 1))
-#			(fib (- i 2))))
+(func fib:int i:int
+	(if (< i 2)
+		1
+		(+  (fib (-- i))
+			(fib (- i)))))
 
 # executed when running script
-(print (+ "hello " "world"))
 (print (dot (vec2 1.0 1.0) (vec2 2.0 2.0)))
-(print (++ 1.0))
-#(print (fib 5))
+(print (fib 10))
+
